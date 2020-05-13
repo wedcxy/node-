@@ -44,8 +44,27 @@ router.get('/inquire/twoFile',[],(req,res)=>{
 				res.json({ status : 201 , message : '请求二级列表失败！' ,err :err })
 			}else{
 				//成功
+				console.log(index)
+				if (index) {
+					//进行分页数进行计算
+					let pageArray = setarray(data,4);
+					//根据传递的数字页面进行选择
+					let newPageArray = pageArray[index-1]
+					console.log(newPageArray)
+					res.json({ status : 200 , message : '请求二级列表成功！', data : newPageArray ,total: data.length})
+					return
+				}
 				res.json({ status : 200 , message : '请求二级列表成功！', data : data})
 			}
+
+			setarray=(array,finish)=>{
+				let index = 0;
+				let newArray = [];
+				while(index < array.length){
+					newArray.push(array.slice(index,index+=finish))
+				}
+					return newArray
+				}
 		})
 		return
 	}
@@ -62,9 +81,10 @@ router.get('/inquire/twoFile',[],(req,res)=>{
 				//进行分页数进行计算
 				let pageArray = setarray(data,4);
 				//根据传递的数字页面进行选择
-				let newPageArray = pageArray[index]
-				console.log("根据页面数请求的数组"+newPageArray);
-				res.json({ status : 200 , message : '请求用户id查询二级列表成功！', data : newPageArray , pageNumber : pageArray.length ,})
+
+				let newPageArray = pageArray[index-1]
+				console.log(pageArray[index-1])
+				res.json({ status : 200 , message : '请求用户id查询二级列表成功！', data : newPageArray , pageNumber : pageArray.length, allNuber:data.length })
 			}
 		})
 	}
